@@ -2,6 +2,7 @@ var mat = [];
 var T = 1;
 var contaP = 0;
 var vittoria = false;
+var GiocoAvviato = false;
 
 function init()
 {
@@ -22,36 +23,43 @@ function init()
     {
         main.innerHTML += `<section><button id = "button${i}_0" onclick = "gioco(${i},0)"></button><button id = "button${i}_1" onclick = "gioco(${i},1)"></button><button id = "button${i}_2" onclick = "gioco(${i},2)"></button></section>`;
     }
+
+    main.innerHTML += `<button id = "gioca" onclick = "gioca()">GIOCA</button>`;
 }
 
 function gioco(r,c)
 {
-    mat[r][c] = T;
-    let button = document.getElementById("button" + r + "_" + c);
-    switch(T)
+    if(GiocoAvviato)
     {
-        case 1:
-            button.innerText = "X";
-            T++;
-            break;
+        mat[r][c] = T;
+        let button = document.getElementById("button" + r + "_" + c);
+        switch(T)
+        {
+            case 1:
+                button.innerText = "X";
+                T++;
+                break;
 
-        case 2:
-            button.innerText = "O";
-            T--;
-            break;
-    }
+            case 2:
+                button.innerText = "O";
+                T--;
+                break;
+        }
 
-    button.disabled = true;
-    contaP++;
+        button.disabled = true;
+        contaP++;
 
-    if(contaP == 9)
-    {
-        alert("Tutte le caselle sono piene, è un pareggio");
+        if(contaP == 9)
+        {
+            alert("Tutte le caselle sono piene, è un pareggio");
+        }
+        else if(!vittoria)
+        {
+            controlloVittoria(r,c);
+        }
     }
-    else if(!vittoria)
-    {
-        controlloVittoria(r,c);
-    }
+    else
+        alert("Prima inizia il gioco");
 }
 
 function controlloVittoria(r,c)
@@ -75,7 +83,31 @@ function controlloVittoria(r,c)
                 alert("Ha vinto il giocatore 1");
                 break;
         }
+
+        disabilitaBottoni();
     }    
+}
+
+function disabilitaBottoni()
+{
+    for(let i = 0; i < 3; i++)
+    {
+        for(let j = 0; j < 3; j++)
+        {
+            document.getElementById("button" + i + "_" + j).disabled = true;
+        }
+    }
+}
+
+function gioca()
+{
+    if(!GiocoAvviato) 
+        GiocoAvviato = true;
+    else
+    {
+        GiocoAvviato = true;
+        document.location.reload();
+    }
 }
 
 function controlloColonna(r,c)
